@@ -2,7 +2,8 @@
 var util = require('util');
 var fs = require('fs');
 var path = require('path');
-var config = require("@nodulus/config").config;
+var configns = require("@nodulus/config").config;
+var config = new configns();
 var ObjectID = require("mongodb").ObjectID;
 var assert = require('assert');
 class dal {
@@ -73,7 +74,7 @@ class dal {
         return res;
     }
     getAll(callback) {
-        var url = global.config.appSettings.database.mongodb.host;
+        var url = config.appSettings.database.mongodb.host;
         var Db = require('mongodb').Db;
         var Server = require('mongodb').Server;
         var db = new Db('scripter', new Server('localhost', 27017));
@@ -254,8 +255,14 @@ class dal {
                     var whereFlag = false;
                     for (var i in oQuery.where)
                         whereFlag = true;
-                    if (whereFlag)
+                    if (whereFlag) {
+                        if (global.config.appSettings.database.mongodb.useObjectId) {
+                            if (oQuery.where && oQuery.where.$query._id && oQuery.where.$query._id.$eq) {
+                                oQuery.where.$query._id.$eq = ObjectID(oQuery.where.$query._id.$eq);
+                            }
+                        }
                         cursor = db.collection(oQuery.collection).find(oQuery.where);
+                    }
                     else
                         cursor = db.collection(oQuery.collection).find();
                     if (oQuery.limit === undefined)
