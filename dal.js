@@ -1,26 +1,32 @@
 "use strict";
-var configns = require("@nodulus/config").config;
-var config = new configns();
-const data = require("./impl/datafactory");
-class DalClass {
-    constructor() {
+/*                 _       _
+                 | |     | |
+  _ __   ___   __| |_   _| |_   _ ___
+ | '_ \ / _ \ / _` | | | | | | | / __|
+ | | | | (_) | (_| | |_| | | |_| \__ \
+ |_| |_|\___/ \__,_|\__,_|_|\__,_|___/
+ @nodulus open source | ©Roi ben haim  ®2016
+ */
+/// <reference path="./typings/main.d.ts" />
+var config = require("@nodulus/config").config;
+var data = require("./datafactory");
+var DalClass = (function () {
+    function DalClass() {
         this.impl = null;
         this.initImpl();
     }
-    initImpl() {
+    DalClass.prototype.initImpl = function () {
         if (config.appSettings.database) {
-            if (config.appSettings.database.diskdb)
-                this.impl = data.DataFactory.createDal("diskdb");
-            else
-                this.impl = data.DataFactory.createDal("mongodb");
+            var dbkey = Object.keys(config.appSettings.database)[0];
+            this.impl = data.DataFactory.createDal(dbkey);
         }
-    }
-    query(queryStr, params, callback) {
+    };
+    DalClass.prototype.query = function (queryStr, params, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.query(queryStr, params, callback);
-    }
-    connect(callback) {
+    };
+    DalClass.prototype.connect = function (callback) {
         if (this.impl === null)
             this.initImpl();
         if (this.impl !== null) {
@@ -29,62 +35,63 @@ class DalClass {
         else {
             callback({ "error": "no database option" }, null);
         }
-    }
-    getAll(queryStr, params, callback) {
+    };
+    DalClass.prototype.getAll = function (queryStr, params, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.getAll(queryStr, params, callback);
-    }
-    getCollection(name, callback) {
+    };
+    DalClass.prototype.getCollection = function (name, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.getCollection(name, callback);
-    }
-    getSchema(name, callback) {
+    };
+    DalClass.prototype.getSchema = function (name, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.getSchema(name, callback);
-    }
-    saveSchema(name, schema, callback) {
+    };
+    DalClass.prototype.saveSchema = function (name, schema, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.saveSchema(name, schema, callback);
-    }
-    deleteCollection(name, id, callback) {
+    };
+    DalClass.prototype.deleteCollection = function (name, id, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.deleteCollection(name, id, callback);
-    }
-    getSingle(name, id, callback) {
+    };
+    DalClass.prototype.getSingle = function (name, id, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.getSingle(name, id, callback);
-    }
-    pushObject(id, collectionName, propertyName, pushObject, callback) {
+    };
+    DalClass.prototype.pushObject = function (id, collectionName, propertyName, pushObject, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.pushObject(id, collectionName, propertyName, pushObject, callback);
-    }
-    pullObject(id, collectionName, propertyName, pullObject, callback) {
+    };
+    DalClass.prototype.pullObject = function (id, collectionName, propertyName, pullObject, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.pullObject(id, collectionName, propertyName, pullObject, callback);
-    }
-    getSet(idArr, collection, callback) {
+    };
+    DalClass.prototype.getSet = function (idArr, collection, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.getSet(idArr, collection, callback);
-    }
-    addToSet(id, collectionName, propertyName, pushObject, callback) {
+    };
+    DalClass.prototype.addToSet = function (id, collectionName, propertyName, pushObject, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.addToSet(id, collectionName, propertyName, pushObject, callback);
-    }
-    get(entity, searchCommand, specialCommand, aggregateCommand, callback) {
+    };
+    DalClass.prototype.get = function (entity, searchCommand, specialCommand, aggregateCommand, callback) {
         if (this.impl === null)
             this.initImpl();
         this.impl.get(entity, searchCommand, specialCommand, aggregateCommand, callback);
-    }
-}
+    };
+    return DalClass;
+}());
 var exportedClass = new DalClass();
 module.exports = exportedClass;

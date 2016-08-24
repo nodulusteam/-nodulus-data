@@ -7,44 +7,34 @@
  @nodulus open source | ©Roi ben haim  ®2016    
  */
 /// <reference path="./typings/main.d.ts" />
-var configns = require("@nodulus/config").config;
-var config = new configns();
+var config = require("@nodulus/config").config;
 
-import * as data from "./impl/datafactory";
+
+import * as data from "./datafactory";
 
 class DalClass {
     public impl: any = null;
 
-    constructor() { 
+    constructor() {
         this.initImpl();
     }
 
     public initImpl() {
+
         if (config.appSettings.database) {
-            if (config.appSettings.database.diskdb)
-                this.impl = data.DataFactory.createDal("diskdb");
-            else
-                this.impl = data.DataFactory.createDal("mongodb");
+            var dbkey = Object.keys(config.appSettings.database)[0];
+            this.impl = data.DataFactory.createDal(dbkey);
         }
     }
 
     public query(queryStr: string, params: any, callback: Function) {
         if (this.impl === null) this.initImpl();
-
-
         this.impl.query(queryStr, params, callback);
     }
 
     public connect(callback: Function) {
-
         if (this.impl === null) this.initImpl();
-        
-
-
-
         if (this.impl !== null) {
-
-
             this.impl.connect(callback);
         } else {
             callback({ "error": "no database option" }, null);
