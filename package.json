@@ -1,24 +1,22 @@
 {
   "name": "@nodulus/data",
-  "version": "1.0.19",
+  "version": "1.0.21",
   "description": "",
   "main": "dal.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
- "repository": {
+  "repository": {
     "type": "git",
     "url": "git+https://github.com/nodulusteam/-nodulus-data.git"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nodulus/config": "*",
-    "@nodulus/logs": "*",
+    "@nodulus/config": "^1.0.60",
+    "@nodulus/logs": "^0.0.22",
     "chalk": "^1.1.3",
-    "merge": "^1.2.0",
-    "mongodb": "^2.1.18",
-    "node-uuid": "^1.4.7"
+    "merge": "^1.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
