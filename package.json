@@ -1,10 +1,10 @@
 {
   "name": "@nodulus/data",
   "version": "1.0.23",
-  "description": "",
+  "description": "a generic data access layer using plugins for different databases",
   "main": "dal.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests --recursive"
   },
   "repository": {
     "type": "git",
