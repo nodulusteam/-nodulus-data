@@ -15,7 +15,13 @@
 export class DataFactory {
     public static createDal(type: string): nodulus.IDal {
 
-        var impl = require("@nodulus/data-" + type);
-        return new impl.dal();
+        try {
+            var impl = require("@nodulus/data-" + type);
+            return new impl.dal();
+        } catch (err) {
+            console.log(err);
+
+        }
+
     }
 }

@@ -12,8 +12,13 @@ var DataFactory = (function () {
     function DataFactory() {
     }
     DataFactory.createDal = function (type) {
-        var impl = require("@nodulus/data-" + type);
-        return new impl.dal();
+        try {
+            var impl = require("@nodulus/data-" + type);
+            return new impl.dal();
+        }
+        catch (err) {
+            console.log(err);
+        }
     };
     return DataFactory;
 }());
